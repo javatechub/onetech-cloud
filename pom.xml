@@ -21,6 +21,8 @@
 
     <modules>
         <module>mock-data</module>
+        <module>file-gen</module>
+        <module>stream-load</module>
     </modules>
 
     <properties>
