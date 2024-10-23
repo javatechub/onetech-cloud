@@ -7,3 +7,8 @@ z
 Jmock-data/src/main/java/cn/cloud/onetech/mock/generator/DataGenerator.java,b\b\bb99773ecbd4f07164f64e6cdebff944e8ecfa89
 q
 Amock-data/src/main/java/cn/cloud/onetech/mock/enums/DataType.java,2\1\21553442947f7eec16c8b9159cadd7d8e6c36fc0
+t
+Dmock-data/src/main/java/cn/cloud/onetech/mock/meta/DataMetadata.java,2\e\2e47a2fce6e55d3d8b508ba7ed6343b8486b6b70
+:
+
+.gitignore,a\5\a5cc2925ca8258af241be7e5b0381edf30266302
