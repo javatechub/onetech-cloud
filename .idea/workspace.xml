@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bb21bb91-a8a0-4460-8ed7-4223e5f83361" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/mock-data/src/main/java/cn/cloud/onetech/mock/PhoneNumberGenerator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mock-data/src/main/resources/scripts/mysql/ddl.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mock-data/src/main/resources/files/chinese_province_city_district_codes.xls" beforeDir="false" afterPath="$PROJECT_DIR$/mock-data/src/main/resources/data/chinese_province_city_district_codes.xls" afterDir="false" />
-    </list>
+    <list default="true" id="bb21bb91-a8a0-4460-8ed7-4223e5f83361" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -127,7 +123,7 @@
       <workItem from="1729566719967" duration="3835000" />
       <workItem from="1729595575650" duration="210000" />
       <workItem from="1729600876161" duration="231000" />
-      <workItem from="1729650070252" duration="1740000" />
+      <workItem from="1729650070252" duration="2083000" />
     </task>
     <servers />
   </component>
