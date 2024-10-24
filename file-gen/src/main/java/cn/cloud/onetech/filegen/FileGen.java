@@ -30,17 +30,12 @@ public class FileGen {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public static void main(String[] args) {
-        List<String> cols = new ArrayList<>();
-        for (int i = 1; i <= 50; i++) {
-            cols.add("col_" + i);
-        }
-        System.out.println(String.join(",", cols));
-//        Integer parallelism = Integer.parseInt(System.getProperty("parallelism"));
-//        Integer rowsPerFile = Integer.parseInt(System.getProperty("rowsPerFile"));
-//        Integer totalCount = Integer.parseInt(System.getProperty("totalCount"));
-//        initExecutor(parallelism);
-//        runExecutor(totalCount, rowsPerFile);
-//        shutdownExecutor();
+        Integer parallelism = Integer.parseInt(System.getProperty("parallelism","10"));
+        Integer rowsPerFile = Integer.parseInt(System.getProperty("rowsPerFile","50"));
+        Integer totalCount = Integer.parseInt(System.getProperty("totalCount","1000"));
+        initExecutor(parallelism);
+        runExecutor(totalCount, rowsPerFile);
+        shutdownExecutor();
     }
 
     private static void initExecutor(Integer parallelism) {
@@ -54,7 +49,7 @@ public class FileGen {
     }
 
     private static void runExecutor(Integer totalCount, Integer rowsPerFile) {
-        String fileOutputDir = System.getProperty("fileOutputDir", "data");
+        String fileOutputDir = System.getProperty("fileOutputDir", ".");
         for (int i = 1; i <= totalCount; i++) {
             final int index = i;
             executor.execute(() -> generateCSVFile(index, rowsPerFile, fileOutputDir));
@@ -180,7 +175,7 @@ public class FileGen {
                 line.add(col50);
                 final boolean isLastLine = (i == rowsPerFile - 1);
                 String lineContent = String.join(",", line) + (isLastLine ? "" : "\n");
-                System.out.println("current line content btyes: " + lineContent.getBytes(StandardCharsets.UTF_8).length);
+                System.out.printf("current line content bytes: %s%n", lineContent.getBytes(StandardCharsets.UTF_8).length);
                 ByteBuffer buffer = ByteBuffer.wrap(lineContent.getBytes());
                 long position = fileChannel.size(); // 获取当前文件大小，以便追加写入（虽然这里每次都是从0开始写，但保持这个习惯以防未来修改）
                 fileChannel.write(buffer, position);
@@ -189,6 +184,6 @@ public class FileGen {
             e.printStackTrace();
         }
         long endTimestamp = System.currentTimeMillis();
-        System.out.printf("generate file %s cost time %s%n", filePath.toFile().getAbsolutePath(), (endTimestamp - startTimestamp));
+        System.out.printf("generate file %s cost time %s, rows in file is %s%n", filePath.toFile().getAbsolutePath(), (endTimestamp - startTimestamp), rowsPerFile);
     }
 }
