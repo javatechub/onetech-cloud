@@ -2,6 +2,8 @@ package cn.cloud.onetech.sl;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import java.io.File;
 import java.io.IOException;
@@ -71,7 +73,8 @@ public class StreamLoad {
             File dataFile = files.get(i);
             String data = getData(dataFile);
             DorisStreamLoader.LoadResponse loadResponse = dorisStreamLoader.loadBatch(data);
-            System.out.println(gson.toJson(loadResponse));
+            JsonObject jsonObject = JsonParser.parseString(loadResponse.respContent).getAsJsonObject();
+            System.out.println(gson.toJson(jsonObject));
         }
     }
 
