@@ -18,15 +18,12 @@
 package cn.cloud.onetech.sl;
 
 
-import java.io.Serializable;
-import java.io.IOException;
-import java.io.BufferedOutputStream;
-import java.io.InputStream;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.Calendar;
 import java.util.UUID;
@@ -37,6 +34,8 @@ import java.util.UUID;
  */
 
 public class DorisStreamLoader implements Serializable {
+
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
 
     private static String loadUrlPattern = "http://%s/api/%s/%s/_stream_load?";
     private String hostPort;
@@ -99,6 +98,7 @@ public class DorisStreamLoader implements Serializable {
         conn.addRequestProperty("Content-Type", "text/plain; charset=UTF-8");
         conn.addRequestProperty("label", label);
         conn.addRequestProperty("format", "csv");
+        conn.addRequestProperty("column_separator", ",");
         conn.addRequestProperty("max_filter_ratio", "0");
 //        conn.addRequestProperty("strict_mode", "true");
 //        conn.addRequestProperty("columns", columns);
@@ -133,11 +133,11 @@ public class DorisStreamLoader implements Serializable {
 
     public LoadResponse loadBatch(String data) {
         Calendar calendar = Calendar.getInstance();
-        String label = String.format("audit_%s%02d%02d_%02d%02d%02d_%s",
+        String label = String.format("stream_load_%s%02d%02d_%02d%02d%02d_%s",
                 calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH),
                 calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), calendar.get(Calendar.SECOND),
                 UUID.randomUUID().toString().replaceAll("-", ""));
-
+        System.out.printf("start stream load for label %s at %s%n", label, FORMATTER.format(LocalDateTime.now()));
         HttpURLConnection feConn = null;
         HttpURLConnection beConn = null;
         try {

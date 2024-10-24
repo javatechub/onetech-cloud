@@ -1,5 +1,8 @@
 package cn.cloud.onetech.sl;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -11,8 +14,6 @@ import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * @author heguanhui
@@ -22,13 +23,15 @@ import java.util.stream.Stream;
 public class StreamLoad {
 
     private static ThreadPoolExecutor executor = null;
+    private static Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
     public static void main(String[] args) {
         String db = "doris_test";
         String table = "tbl_dk_50";
-        String fenode = System.getProperty("fenode");
-        String user = System.getProperty("user");
-        String password = System.getProperty("password");
-        String dataDir = System.getProperty("dataDir");
+        String fenode = System.getProperty("fenode", "192.168.137.10:8035");
+        String user = System.getProperty("user", "root");
+        String password = System.getProperty("password","hegh^_^Doris618");
+        String dataDir = System.getProperty("dataDir", ".");
         Integer parallelism = Integer.parseInt(System.getProperty("parallelism", "10"));
         initExecutor(parallelism);
         DorisStreamLoader dorisStreamLoader = new DorisStreamLoader(fenode, db, table, user, password);
@@ -66,22 +69,9 @@ public class StreamLoad {
     private static void streamLoad(DorisStreamLoader dorisStreamLoader, List<File> files) {
         for (int i = 0; i < files.size(); i++) {
             File dataFile = files.get(i);
-//            String data = getData(dataFile);
-//            DorisStreamLoader.LoadResponse loadResponse = dorisStreamLoader.loadBatch(data);
-//            System.out.println(loadResponse);
-            Stream<String> stream = Stream.of(
-                    "curl",
-                    "--location-trusted",
-                    "-u %s:'%s'",
-                    "-H \"Expect:100-continue\"",
-                    "-H \"column_separator:,\"",
-                    "-T %s",
-                    "-XPUT",
-                    "http://%s/api/doris_test/tbl_dk_50/_stream_load"
-            );
-            String curlCommand = stream.collect(Collectors.joining(" "));
-            String command = String.format(curlCommand, dorisStreamLoader.getUser(), dorisStreamLoader.getPasswd(), dataFile.getAbsolutePath(), dorisStreamLoader.getHostPort());
-            System.out.println(ShellExecutor.execute(command));
+            String data = getData(dataFile);
+            DorisStreamLoader.LoadResponse loadResponse = dorisStreamLoader.loadBatch(data);
+            System.out.println(gson.toJson(loadResponse));
         }
     }
 
