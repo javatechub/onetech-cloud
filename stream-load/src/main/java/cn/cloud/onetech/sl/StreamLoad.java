@@ -25,7 +25,6 @@ import java.util.concurrent.TimeUnit;
 public class StreamLoad {
 
     private static ThreadPoolExecutor executor = null;
-    private static Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     public static void main(String[] args) {
         String db = "doris_test";
@@ -72,9 +71,7 @@ public class StreamLoad {
         for (int i = 0; i < files.size(); i++) {
             File dataFile = files.get(i);
             String data = getData(dataFile);
-            DorisStreamLoader.LoadResponse loadResponse = dorisStreamLoader.loadBatch(data);
-            JsonObject jsonObject = JsonParser.parseString(loadResponse.respContent).getAsJsonObject();
-            System.out.println(gson.toJson(jsonObject));
+            dorisStreamLoader.loadBatch(data);
         }
     }
 

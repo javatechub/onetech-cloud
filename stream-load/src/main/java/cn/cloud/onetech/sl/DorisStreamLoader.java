@@ -18,6 +18,11 @@
 package cn.cloud.onetech.sl;
 
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -36,6 +41,7 @@ import java.util.UUID;
 public class DorisStreamLoader implements Serializable {
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+    private static Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     private static String loadUrlPattern = "http://%s/api/%s/%s/_stream_load?";
     private String hostPort;
@@ -169,6 +175,8 @@ public class DorisStreamLoader implements Serializable {
             while ((line = br.readLine()) != null) {
                 response.append(line);
             }
+            JsonObject jsonObject = JsonParser.parseString(response.toString()).getAsJsonObject();
+            System.out.println(gson.toJson(jsonObject));
             return new LoadResponse(status, respMsg, response.toString());
 
         } catch (Exception e) {

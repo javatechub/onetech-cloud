@@ -32,7 +32,7 @@ public class FileGen {
     public static void main(String[] args) {
         Integer parallelism = Integer.parseInt(System.getProperty("parallelism","10"));
         Integer rowsPerFile = Integer.parseInt(System.getProperty("rowsPerFile","50"));
-        Integer totalCount = Integer.parseInt(System.getProperty("totalCount","1000"));
+        Integer totalCount = Integer.parseInt(System.getProperty("totalCount","100"));
         initExecutor(parallelism);
         runExecutor(totalCount, rowsPerFile);
         shutdownExecutor();
