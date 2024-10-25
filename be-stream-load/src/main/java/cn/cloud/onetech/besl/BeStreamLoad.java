@@ -84,7 +84,7 @@ public class BeStreamLoad {
     }
 
     private static void runExecutor(Integer parallelism) {
-        String dataDir = "../data";
+        String dataDir = System.getProperty("dataDir");
         File data = new File(dataDir);
         List<File> dataFiles = Arrays.asList(data.listFiles());
         int total = dataFiles.size();
