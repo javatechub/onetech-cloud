@@ -22,7 +22,8 @@
     <modules>
         <module>mock-data</module>
         <module>file-gen</module>
-        <module>stream-load</module>
+        <module>fe-stream-load</module>
+        <module>be-stream-load</module>
     </modules>
 
     <properties>

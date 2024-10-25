@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>stream-load</artifactId>
+    <artifactId>fe-stream-load</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -17,11 +17,6 @@
     </properties>
 
     <dependencies>
-<!--        <dependency>-->
-<!--            <groupId>mysql</groupId>-->
-<!--            <artifactId>mysql-connector-java</artifactId>-->
-<!--            <version>8.0.28</version>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
@@ -30,7 +25,7 @@
     </dependencies>
 
     <build>
-        <finalName>stream-load</finalName>
+        <finalName>fe-stream-load</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

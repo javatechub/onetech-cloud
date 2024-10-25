@@ -1,5 +1,6 @@
 #!/bin/bash
 PWD=$(pwd)
+source $PWD/conf/doris-cluster.conf
 LOG_PATH="$PWD/log"
 # 检查路径是否存在
 if [ ! -d "$LOG_PATH" ]; then
@@ -17,15 +18,5 @@ else
     # 路径已存在，不处理
     echo "路径 $LOG_PATH 已存在，不处理。"
 fi
-FENODE=$1
-USER=$2
-PASSWORD=$3
-DATA_DIR=$4
-PARALLELISM=$5
-# 检查路径是否存在
-#if [ ! -d "$DATA_DIR" ]; then
-#    echo "$DATA_DIR 路径不存在。" >&2
-#    exit 1
-#else
-#fi
-nohup java -Dparallelism=$PARALLELISM -Dfenode=$FENODE -Duser=$USER -Dpassword=$PASSWORD -DdataDir=$DATA_DIR -jar "$PWD/jar/stream-load.jar" >> "$LOG_PATH/stream-load.log" 2>&1 &
+PARALLELISM=$1
+nohup java -Dparallelism=$PARALLELISM -DbeHost=$BE_HOST -DbeHttpPort=$BE_HTTP_PORT -Dusername=$USERNAME -Dpassword=$PASSWORD -Ddb=$DB -Dtable=$TABLE -jar "$PWD/jar/be-stream-load.jar" >> "$LOG_PATH/be-stream-load.log" 2>&1 &

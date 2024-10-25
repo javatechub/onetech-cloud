@@ -33,23 +33,57 @@ public class FileGen {
         Integer parallelism = Integer.parseInt(System.getProperty("parallelism","10"));
         Integer rowsPerFile = Integer.parseInt(System.getProperty("rowsPerFile","50"));
         Integer totalCount = Integer.parseInt(System.getProperty("totalCount","100"));
-        initExecutor(parallelism);
+        initExecutor(parallelism, totalCount);
         runExecutor(totalCount, rowsPerFile);
         shutdownExecutor();
     }
 
-    private static void initExecutor(Integer parallelism) {
+    // 方法：获取小于或等于n的最大2的幂
+    public static int floorPowerOfTwo(int n) {
+        if (n != 0 && n % 2 == 0) {
+            return n;
+        }
+        int power = 1;
+        while (power <= n) {
+            power <<= 1; // 左移一位，相当于乘以2
+        }
+        return power; // 右移一位，得到小于或等于n的最大2的幂
+    }
+
+    // 方法：获取大于或等于n的最小2的幂
+    public static int ceilPowerOfTwo(int n) {
+        int power = 1;
+        while (power < n) {
+            power <<= 1; // 左移一位，相当于乘以2
+        }
+        return power;
+    }
+
+    // 方法：获取离n最近的2的幂
+    public static int nearestPowerOfTwo(int n) {
+        int floor = floorPowerOfTwo(n);
+        int ceil = ceilPowerOfTwo(n);
+
+        // 计算两个2的幂与n的距离
+        int diffFloor = n - floor;
+        int diffCeil = ceil - n;
+
+        // 返回距离最小的那个2的幂
+        return diffFloor <= diffCeil ? floor : ceil;
+    }
+
+    private static void initExecutor(Integer parallelism, Integer totalCount) {
         executor = new ThreadPoolExecutor(
                 parallelism,
                 parallelism * 4,
                 30000,
                 TimeUnit.MILLISECONDS,
-                new ArrayBlockingQueue<>(512)
+                new ArrayBlockingQueue<>(nearestPowerOfTwo(totalCount))
         );
     }
 
     private static void runExecutor(Integer totalCount, Integer rowsPerFile) {
-        String fileOutputDir = System.getProperty("fileOutputDir", ".");
+        String fileOutputDir = System.getProperty("fileOutputDir", "./data");
         for (int i = 1; i <= totalCount; i++) {
             final int index = i;
             executor.execute(() -> generateCSVFile(index, rowsPerFile, fileOutputDir));
